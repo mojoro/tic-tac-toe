@@ -1,8 +1,10 @@
+// Creates an object representing the gameboard of a 3x3 2d array of Cell objects
 function Gameboard() {
   const rows = 3;
   const columns = 3;
   const board = [];
 
+  // pushes a Cell object into each index
   for(let i = 0; i < rows; i++){
     board[i] = [];
     for(let j = 0; j < columns; j++){
@@ -203,16 +205,18 @@ function ScreenController() {
     playerTwoInput.value = '';
   }
 
-  nameEntryButton.addEventListener("click", assignNames);
-
   const resetGame = () => {
     gameDiv.textContent = '';
     gameDiv.removeEventListener("click", gameClickHandler);
+    nameEntryButton.removeEventListener("click", assignNames);
+    resetButton.removeEventListener("click", resetGame);
     playerTurn.innerHTML = '';
     playerOneInput.value = '';
     playerTwoInput.value = '';
     ScreenController();
   }
+
+  nameEntryButton.addEventListener("click", assignNames);
 
   resetButton.addEventListener("click", resetGame);
 
