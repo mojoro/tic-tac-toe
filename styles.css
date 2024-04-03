@@ -1,0 +1,89 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  width: calc(100vw - .1rem);
+  height: calc(100vh - .1rem);
+  display: grid;
+  grid-template-rows: 1fr 6fr 2fr;
+  justify-content: center;
+}
+
+header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 2fr 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+header h1 {
+  text-align: center;
+  align-self: center;
+  grid-column: 1 / -1;
+  
+}
+
+input#player-one {
+  grid-column: 1 / 2;
+  padding: 5px;
+}
+
+input#player-two {
+  grid-column: 2 / 3;
+  padding: 5px;
+}
+
+header button {
+  grid-column: 1 / -1;
+  padding: 5px;
+}
+
+.game {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  grid-template-rows: repeat(3, 200px);
+}
+
+
+.game button:nth-child(1), 
+.game button:nth-child(2), 
+.game button:nth-child(3) {
+  border-top: none;
+}
+
+.game button:nth-child(1), 
+.game button:nth-child(4), 
+.game button:nth-child(7) {
+  border-left: none;
+}
+
+.game button:nth-child(3), 
+.game button:nth-child(6), 
+.game button:nth-child(9) {
+  border-right: none;
+}
+
+.game button:nth-child(7), 
+.game button:nth-child(8), 
+.game button:nth-child(9) {
+  border-bottom: none;
+}
+
+.tile {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  width: 200px;
+  height: 200px;
+  font-size: 150px;
+  background-color: rgba(255, 255, 255, 0.0);
+}
+
+.player-turn {
+  text-align: center;
+  align-self: start;
+}
