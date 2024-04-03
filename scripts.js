@@ -19,7 +19,7 @@ function Gameboard() {
   };
 
   const printBoard = () => {
-    const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()))
+    const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()));
     console.log(boardWithCellValues);
   };
 
@@ -71,11 +71,77 @@ function GameController(playerOneName = "player one", playerTwoName = "player tw
     console.log(`${getActivePlayer().name}'s turn`);
   };
 
+  const checkWin = () => {
+    const boardArray = board.getBoard().map((row) => row.map((cell) => cell.getValue()));
+
+    const rowCheck = () => {
+      let consecutiveCount = 0;
+      for(let i = 0; i < boardArray.length; i++){
+        if (consecutiveCount === boardArray.length) return true;
+        for(let j = 0; j < boardArray.length; j++){
+          if(boardArray[i][j] === getActivePlayer().value) consecutiveCount++;
+          else {
+            consecutiveCount = 0;
+            break;
+          }
+        }
+      }
+    }
+
+    const columnCheck = () => {
+      let consecutiveCount = 0;
+      for(let i = 0; i < boardArray.length; i++){
+        if (consecutiveCount === boardArray.length) return true;
+        for(let j = 0; j < boardArray[i].length; j++){
+          if(boardArray[j][i] === getActivePlayer().value) consecutiveCount++;
+          else {
+            consecutiveCount = 0;
+            break;
+          }
+        }
+      }
+    }
+
+    const diagonalCheck = () => {
+      let consecutiveCount = 0;
+      for(let i = 0; i < boardArray.length; i++){
+        if(boardArray[i][i] === getActivePlayer().value) consecutiveCount++;
+        else {
+          consecutiveCount = 0;
+          break;
+        }
+      }
+      if (consecutiveCount === boardArray.length) return true;
+
+      let j = boardArray.length - 1;
+      for(let i = 0; i < boardArray.length; i++){
+        if(boardArray[i][j--] === getActivePlayer().value) consecutiveCount++;
+        else {
+          consecutiveCount = 0;
+          break;
+        }
+      }
+      if (consecutiveCount === boardArray.length) return true;
+    }
+
+    const rowWin = rowCheck();
+    const columnWin = columnCheck();
+    const diagonalWin = diagonalCheck();
+
+    if (rowWin || columnWin || diagonalWin) return true
+  }
+  
+
   const playRound = (row, column) => {
     console.log(`Marking row ${row}, column ${column}`);
     try {
       board.chooseTile(row, column, getActivePlayer().value);
 
+      if (checkWin()) {
+        console.log(`${getActivePlayer().name} has won!`);
+        console.log(board.getBoard().map((row) => row.map((cell) => cell.getValue())));
+        return;
+      }
       switchPlayerTurn();
       printNewRound();
     }
