@@ -134,7 +134,21 @@ function GameController(playerOneName = "player one", playerTwoName = "player tw
     const diagonalWin = diagonalCheck();
 
     if (rowWin || columnWin || diagonalWin) return true
-  }
+  };
+
+  const checkTie = () => {
+    const boardArray = board.getBoard().map((row) => row.map((cell) => cell.getValue()));
+    let zeroCount = 0;
+    for(let i = 0; i < boardArray.length; i++){
+      for(let j = 0; j < boardArray.length; j++){
+        if (boardArray[i][j] === 0) {
+          zeroCount++;
+        }
+      }
+    }
+    if (zeroCount > 0) return false;
+    else return true;
+  };
   
 
   const playRound = (row, column) => {
@@ -145,8 +159,11 @@ function GameController(playerOneName = "player one", playerTwoName = "player tw
       if (checkWin()) {
         console.log(`${getActivePlayer().name} has won!`);
         console.log(board.getBoard().map((row) => row.map((cell) => cell.getValue())));
-        return true;
+        return 'win';
+      } else if (checkTie()) {
+        return 'tie';
       }
+
       switchPlayerTurn();
       printNewRound();
     }
@@ -177,6 +194,8 @@ function ScreenController() {
   const assignNames = () => {
     const name1 = playerOneInput.value;
     const name2 = playerTwoInput.value;
+
+    if (!name1 || !name2) return;
 
     game.assignPlayerNames(name1, name2)
 
@@ -232,12 +251,20 @@ function ScreenController() {
     const selectedColumn = e.target.dataset.col;
     if (!selectedRow && !selectedColumn) return;
 
-    if (game.playRound(selectedRow, selectedColumn)) {
-      gameDiv.removeEventListener("click", gameClickHandler);
-      playerTurn.innerHTML = `${game.getActivePlayer().name} has won!`;
-    } else {
-      playerTurn.innerHTML = `${game.getActivePlayer().name}'s turn`;
+    switch (game.playRound(selectedRow, selectedColumn)){
+      case 'win':
+        gameDiv.removeEventListener("click", gameClickHandler);
+        playerTurn.innerHTML = `${game.getActivePlayer().name} has won!`;
+        break;
+      case 'tie':
+        gameDiv.removeEventListener("click", gameClickHandler);
+        playerTurn.innerHTML = `It's a tie!`;
+        break;
+      default:
+        playerTurn.innerHTML = `${game.getActivePlayer().name}'s turn`;
+        break;
     }
+
     updateScreen();
   }
 
